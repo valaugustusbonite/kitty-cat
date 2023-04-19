@@ -1,0 +1,10 @@
+.feedListViewContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+// .feedListViewContainer::after {
+//   content: "";
+//   flex-basis: 450px;
+// }

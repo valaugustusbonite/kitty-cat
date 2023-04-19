@@ -1,0 +1,21 @@
+@use 'src/styles/variables';
+
+.feedItemContainer {
+  background-color: green;
+  height: 125px;
+  width: 125px;
+}
+
+@media (min-width: variables.$tablet-width) {
+ .feedItemContainer {
+  width: 200px;
+  height: 200px;
+ }
+}
+
+@media (min-width: variables.$desktop-max-width) {
+  .feedItemContainer {
+   width: 250px;
+   height: 250px;
+  }
+ }
