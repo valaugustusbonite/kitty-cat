@@ -1,21 +1,16 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import { DropDown } from '@/common/components/dropdown'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { Feed } from '@/feature/feed'
-import { SkeletonTheme } from 'react-loading-skeleton'
-const queryClient = new QueryClient()
+import { Feed } from './feature/feed'
+import { CatDetails } from './feature/cat_details/components/CatDetails'
+import { AppRoutes } from './routes'
+import { AppProvider } from './providers/AppProvider'
+
 
 function App() {
-
   return (
-    <QueryClientProvider client={queryClient} >
-       <SkeletonTheme baseColor="#dadada" highlightColor="#b8b8b8">
-        <Feed />
-       </SkeletonTheme>
-    </QueryClientProvider>
+    <AppProvider>
+      <AppRoutes />
+    </AppProvider>
   )
 }
 

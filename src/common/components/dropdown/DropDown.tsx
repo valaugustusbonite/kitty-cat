@@ -1,33 +1,16 @@
-import { Select } from '@chakra-ui/react'
-import { DropDownItem, DropDownItemProps } from '@/common/components/dropdown'
-import { useGetCatBreedNames} from '@/hooks'
-import { CatBreed } from '@/feature/feed/types'
 import styles from '@/common/components/dropdown/DropDown.module.scss'
-import { useDispatch } from 'react-redux'
-import { clearBreed, setBreed } from '@/feature/feed/slices/currentCatBreedSlice'
-import { ChangeEventHandler } from 'react'
+import { Select } from '@chakra-ui/react'
 
 
 interface DropDownProps {
   dropdownItems: JSX.Element[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => Promise<void>
 }
 
 export const DropDown = ({
   dropdownItems,
+  onChange
 }: DropDownProps) => {
-  const dipstach = useDispatch()
-
-  const changeBreed = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === 'Select a breed...' || e.target.value === '') {
-      dipstach(
-        clearBreed()
-      )
-    } else {
-      dipstach(
-        setBreed(e.target.value)
-      )
-    }
-  }
 
   return (
    <div className={styles.dropdownWrapper}>
@@ -38,7 +21,7 @@ export const DropDown = ({
         size='lg'
         variant='outline'
         iconSize='0px'
-        onChange={(e) => changeBreed(e)}
+        onChange={(e) => onChange(e)}
       >
           {...dropdownItems}
       </Select>

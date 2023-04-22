@@ -1,15 +1,15 @@
-import React from 'react'
-import styles from '@/feature/feed/components/Feed.module.scss'
-import { FeedListView } from '@/feature/feed'
-import { GridItem,} from '@chakra-ui/react'
 import { DropDown, DropDownItem } from '@/common/components/dropdown'
+import { FeedListView } from '@/feature/feed'
+import styles from '@/feature/feed/components/Feed.module.scss'
 import { useGetCatBreedNames } from '@/hooks'
-import { CatBreed } from '../types'
+import { RootState } from '@/store'
+import React, { useCallback, useEffect, useRef } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import "react-loading-skeleton/dist/skeleton.css";
+import "react-loading-skeleton/dist/skeleton.css"
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { useGetCats } from '../api/useGetCats'
-import { useDispatch } from 'react-redux'
-import { setBreed } from '../slices/currentCatBreedSlice'
+import { clearBreed, selectCatBreed, setBreed } from '../slices/currentCatBreedSlice'
+import { CatBreed } from '../types'
 
 interface ContentViewProps {
   data: any;
@@ -17,8 +17,59 @@ interface ContentViewProps {
   isError: boolean;
 }
 
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+
 export const Feed = () => {
-  const { data, isError, isLoading } = useGetCatBreedNames()
+  const catBreeds = useGetCatBreedNames()
+  const dipstach = useDispatch()
+  const breedId = useTypedSelector(selectCatBreed)
+  const {   
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage, 
+    data,
+    refetch,
+    isLoading
+  } = useGetCats(breedId);
+
+
+    useEffect(() => {
+      if (breedId) {
+        refetch()
+      }
+    }, [breedId])
+
+  const intObserver = useRef<IntersectionObserver | null>()
+  const lastCatRef = useCallback((cat: HTMLDivElement) => {
+    if (isFetchingNextPage) return
+
+    if (intObserver.current) {
+      intObserver.current.disconnect()
+    }
+
+    intObserver.current = new IntersectionObserver(cats => {
+      if (cats[0].isIntersecting && hasNextPage) {
+        console.log("Near last img")
+        fetchNextPage()
+      }
+    })
+
+    if (cat) intObserver.current.observe(cat)
+  }, [isFetchingNextPage, fetchNextPage, hasNextPage, breedId]) 
+
+  const changeBreed = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === 'Select a breed...' || e.target.value === '') {
+      dipstach(
+        clearBreed()
+      )
+
+      return
+    } 
+
+    dipstach(
+      setBreed(e.target.value)
+    )
+  }
 
   return (
     <section className={styles.feedContainer}>
@@ -28,24 +79,29 @@ export const Feed = () => {
           </h1>
         <div className={styles.dropdownArea}>
           {
-            isLoading ? 
+            catBreeds.isLoading ? 
             <div className={styles.skeletonDropDownWrapper}>
               <Skeleton height='45px'/>
             </div> :
             <DropDown 
               dropdownItems={
-                data.map((cat: CatBreed) => <DropDownItem
+                catBreeds.data.map((cat: CatBreed) => <DropDownItem
                 key={cat.id}
                 value={cat.id}
                 label={cat.name} />
               )} 
+              onChange={changeBreed}
             />
           }
         </div>
       </div>
       
       <div className={styles.listArea}>
-        <FeedListView />
+        <FeedListView 
+          isLoading={!data ? isLoading : isFetchingNextPage}
+          cats={data}
+          refProp={lastCatRef}
+        />
       </div>
     </section>
   )

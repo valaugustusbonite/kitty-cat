@@ -1,29 +1,80 @@
-import React from 'react'
-import styles from '@/feature/feed/components/FeedListView.module.scss'
 import { FeedItem, SkeletonFeeditem } from '@/feature/feed'
-import { useGetCatBreedNames } from '../../../hooks/useGetCatBreedNames'
-import { DropDown } from '@/common/components/dropdown'
-import { useGetCats } from '../api/useGetCats'
+import styles from '@/feature/feed/components/FeedListView.module.scss'
+import { ReactNode, Ref } from 'react'
+import { InfiniteData } from 'react-query'
+import { Cat } from '../slices/currentCatBreedSlice'
 
-export const FeedListView = () => {
-  const { data, isError, isLoading } = useGetCats()
+interface FeedListViewProps {
+  cats: InfiniteData<Cat[]> | undefined,
+  isLoading: boolean,
+  refProp?: Ref<HTMLDivElement>
+}
 
+interface ListViewProps {
+  children: ReactNode
+  isLoading: boolean
+}
 
-  if (!data && !isLoading) {
-    return <div>
-      No data to show.
-    </div>
+export const FeedListView = ({
+  cats,
+  isLoading,
+  refProp
+}: FeedListViewProps) => {
+
+  if (!cats && !isLoading) {
+    return <ListViewWrapper 
+      children={
+        <div className={styles.noDataPlaceholder}>
+          No data to show.
+        </div>
+      } 
+      isLoading={false}
+    />
   }
 
-  if (isError) {
-    <div>
-      Something went wrong.
-    </div>
-  }
+
+  
+  const renderItemComponents = cats?.pages.map((page) => {
+        return page.map((cat, i) => {
+           if (page.length === i + 1) {
+              return <FeedItem 
+                url={cat.url}
+                key={cat.id}
+                ref={refProp}
+                catId={cat.id}
+              />
+            }
+
+             return <FeedItem 
+              url={cat.url}
+              key={cat.id}
+              catId={cat.id}
+            />
+        })
+      })
+  
+
   return (
     <div className={styles.feedListViewContainer}>
-        
-        <SkeletonFeeditem />
+    {renderItemComponents}
+      {
+        isLoading ? <SkeletonFeeditem /> : null
+      }
     </div>
+      
   )
+}
+
+const ListViewWrapper = ({
+  children,
+  isLoading
+}: ListViewProps) => {
+ return(
+  <div className={styles.feedListViewContainer}>
+    {children}
+    {
+      isLoading ? <SkeletonFeeditem /> : null
+    }
+  </div>
+ )
 }
