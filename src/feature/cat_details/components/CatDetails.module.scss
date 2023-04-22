@@ -1,0 +1,30 @@
+.detailsContainer {
+    padding: 1em;
+
+    
+    .imageContainer {
+        position: relative;
+        width: 100%;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        .detailsOverlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 10;
+            display: flex;
+            justify-content: start;
+            align-items: flex-end;
+            font-weight: 500;
+            font-size: 1.1em;
+            padding: 0.2em;
+            color: #fff;
+            font-weight: 700;
+            font-size: 4em;
+        }
+    }
+}

@@ -1,11 +1,25 @@
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
+import { Cat } from "../slices/currentCatBreedSlice";
 
-export const useGetCats = () => {
- return useQuery("cats", async () => {
-   const { data } = await axios.get("https://reqres.in/api/users?page=1");
-
-   return data;
- });
+export const useGetCats = (breedId: string) => {
+  const query = useInfiniteQuery(
+    ["get-cats", breedId], 
+    ({ pageParam = 1 }) => getCats(pageParam, breedId),
+    {
+      enabled: false,
+      staleTime: Infinity,
+      getNextPageParam: (lastPage: Cat[], allPages) => {
+        
+        return lastPage.length === 10? allPages.length + 1 : undefined
+      }
+    }
+   );
+ return query;
 };
 
+const getCats = async (pageParam = 1, breedId: string): Promise<Cat[]> => {
+  const { data } = await axios.get(`https://api.thecatapi.com/v1/images/search?limit=10&order=ASC&breed_ids=${breedId}&page=${pageParam}`)
+
+    return data;
+}
