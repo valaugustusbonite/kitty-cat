@@ -1,6 +1,6 @@
 import { FeedItem, SkeletonFeeditem } from '@/feature/feed'
 import styles from '@/feature/feed/components/FeedListView.module.scss'
-import { Cat } from '@/types/Cat'
+import { Cat } from '@/common/types/Cat'
 import { ReactNode, Ref } from 'react'
 import { InfiniteData } from 'react-query'
 

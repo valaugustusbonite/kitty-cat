@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useQuery } from 'react-query'
-import { Cat } from '@/types/Cat'
+import { Cat } from '@/common/types/Cat'
 
 export const useGetCatBreedNames = () => {
   return useQuery('cat-breeds', getCatBreeds)

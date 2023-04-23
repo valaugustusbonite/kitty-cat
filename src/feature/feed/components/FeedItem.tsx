@@ -1,5 +1,5 @@
 import styles from '@/feature/feed/components/FeedItem.module.scss'
-import { Cat } from '@/types/Cat'
+import { Cat } from '@/common/types/Cat'
 import { Box } from '@chakra-ui/react'
 import React, { Ref } from 'react'
 import { useNavigate } from 'react-router-dom'

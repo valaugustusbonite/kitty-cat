@@ -1,4 +1,4 @@
-import { Cat } from '@/types/Cat'
+import { Cat } from '@/common/types/Cat'
 import axios from 'axios'
 import { useInfiniteQuery } from 'react-query'
 

@@ -1,4 +1,4 @@
-import { Cat } from '@/types/Cat'
+import { Cat } from '@/common/types/Cat'
 
 export interface DropDownItemProps {
   cat: Cat

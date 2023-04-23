@@ -1,5 +1,5 @@
 import { RootState } from '@/store'
-import { Cat } from '@/types/Cat'
+import { Cat } from '@/common/types/Cat'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type CatBreedState = {
