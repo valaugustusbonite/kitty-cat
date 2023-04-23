@@ -11,6 +11,7 @@ This project was bootstrapped with [Vite](https://vitejs.dev/), using the [Redux
 * [Commit Message](#commit-message)
 * [Components and Styling](#components-and-styling)
 * [Style Guide](#style-guide)
+* [Error Handling](#error-handling)
 
 # Getting Started
 
@@ -72,26 +73,30 @@ To learn React, check out the [React documentation](https://reactjs.dev/).
     |-- src
     |    |-- App.css
     |    |-- App.tsx
-    |    |-- assets
-    |    |-- common
-    |    |   |-- components
-    |    |   |-- types
-    |    |-- feature
-    |    |   └-- feature_name
-    |    |         |-- api
-    |    |         |-- components
-    |    |         |-- types
-    |    |         └-- slices
-    |    |-- hooks
-    |    |-- providers
-    |    |-- routes
-    |    |-- store
-    |    |-- styles
+    |    |-- assets                         # Project assets
+    |    |-- config                         # Env values
+    |    |-- lib                            # Common configs for used libraries like Axios
+    |    |-- common                                             
+    |    |   |-- components                 # Reusable components
+    |    |   |-- types                      # Reusable types
+    |    |   └-- exception                  # Reusable fallback components
+    |    |-- feature(module)                        
+    |    |   └-- feature_name               # Feature/module of a specific feature
+    |    |         |-- api                  # Api logic needed for that module
+    |    |         |-- components           # Components used in that feature module
+    |    |         |-- types                # Types used in the feature module
+    |    |         └-- slices               # Redux slices used in the feature module
+    |    |-- hooks                          # Reusable hooks
+    |    |-- providers                      # App wrappers / context or config providers
+    |    |-- routes                         # Routing config
+    |    |-- store                          # Redux store
+    |    |-- styles                         # Global style configs
     |    └-- vite-env.d.ts
     |
     |-- tsconfig.json
     |-- tsconfig.node.json
     |-- vite.config.ts
+    |-- .env.example                        # .env content
     |-- .eslintrc.json
     |-- .gitignore
     |-- .prettierrc
@@ -194,3 +199,19 @@ This is the most abstract level of code standardization. It's related to the imp
 One of the most important points of the Clean Code is how you name your functions, variables, components, etc. Use this amazing guide to understand how to write better variable names.
 
 [Naming Cheatsheet](https://github.com/kettanaito/naming-cheatsheet)
+
+# Error Handling
+
+### API Errors
+
+Set up an interceptor for handling errors. You can use it to fire a notification toast to notify users that something went wrong, log out unauthorized users, or send new requests for refreshing tokens.
+
+### In App Errors
+
+Use error boundaries to handle errors that happen in the React tree. It is very popular to set only 1 single error boundary for the entire application, which would break the entire application when an error occurs. That's why you should have more error boundaries on more specific parts of the application. That way if an error occurs the app will still work without the need to restart it.
+
+[Error Boundary Example Code](./src/providers/AppProvider.tsx)
+
+### Error Tracking
+
+You should track any errors that occur in production. Although it's possible to implement your own solution, it is a better idea to use tools like [Sentry](https://sentry.io/). It will report any issue that breaks the app. You will also be able to see on which platform, browser, etc. did it occur. Make sure to upload source maps to sentry to see where in your source code did the error happen.
