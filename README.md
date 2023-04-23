@@ -12,6 +12,7 @@ This project was bootstrapped with [Vite](https://vitejs.dev/), using the [Redux
 * [Components and Styling](#components-and-styling)
 * [Style Guide](#style-guide)
 * [Error Handling](#error-handling)
+* [Quick Demo](#quick-demo)
 
 # Getting Started
 
@@ -215,3 +216,22 @@ Use error boundaries to handle errors that happen in the React tree. It is very 
 ### Error Tracking
 
 You should track any errors that occur in production. Although it's possible to implement your own solution, it is a better idea to use tools like [Sentry](https://sentry.io/). It will report any issue that breaks the app. You will also be able to see on which platform, browser, etc. did it occur. Make sure to upload source maps to sentry to see where in your source code did the error happen.
+
+# Quick Demo
+
+## Infinite Scroll (Desktop)
+
+![Alt text](./src/assets/infinite-scroll.gif)
+
+## Infinite Scroll (Mobile)
+
+![Alt text](./src/assets/infinite-scroll-mobile.gif)
+
+## View Details (Desktop)
+
+![Alt text](./src/assets/view-details-web.gif)
+
+## View Details (Mobile)
+
+![Alt text](./src/assets/view-details-mobile.gif)
+
