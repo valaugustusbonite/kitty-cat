@@ -3,8 +3,8 @@ import catBreedSliceReducer from '../feature/feed/slices/currentCatBreedSlice'
 
 export const store = configureStore({
   reducer: {
-    catBreedFilter:  catBreedSliceReducer
+    catBreedFilter: catBreedSliceReducer,
   },
 })
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>

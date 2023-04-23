@@ -1,56 +1,80 @@
-import { Image } from "@chakra-ui/react"
-import { useParams } from "react-router-dom"
-import { useGetCatDetails } from "../api/useGetCatDetails"
 import styles from '@/feature/cat_details/components/CatDetails.module.scss'
+import { Image } from '@chakra-ui/react'
+import Skeleton from 'react-loading-skeleton'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useGetCatDetails } from '../api/useGetCatDetails'
+import { ArrowBackButton } from '@/common/components/buttons/ArrowBackButton'
 
 interface ImageAreaProps {
-  imageUrl: string;
-  imageAlt: string;
-  catName: string;
+  imageUrl: string
+  imageAlt: string
+  catName: string
+}
+
+interface CatInfoSectionProps {
+  origin: string
+  temperament: string
+  isLoading: boolean
 }
 
 export const CatDetails = () => {
-    const { catId } = useParams()
-    const { data, isLoading, isError } = useGetCatDetails(catId ?? '')
+  const { catId } = useParams()
+  const { state } = useLocation()
+  const { data, isLoading } = useGetCatDetails(state.id ?? catId ?? '')
+  const catDetails = data?.breeds[0]
 
-    if (data) {
-      console.log("TANGINA MO")
-      console.log(data)
-    }
-
-    const catDetails = data?.breeds[0]
   return (
-   <div className={styles.detailsContainer}>
-      <ImageArea 
+    <div className={styles.detailsContainer}>
+      <ImageArea
         imageAlt={catDetails?.name ?? ''}
-        imageUrl={data?.url ?? ''}
+        imageUrl={state.url ?? data?.url ?? ''}
         catName={catDetails?.name ?? ''}
       />
-      <div>
-        Origin: {catDetails?.origin}
-      </div>
-      <div>
-        {catDetails?.temperament}
-      </div>
-   </div>
+      <CatInfoSection
+        origin={catDetails?.origin ?? ''}
+        temperament={catDetails?.temperament ?? ''}
+        isLoading={isLoading}
+      />
+    </div>
   )
 }
 
-const ImageArea = ({
-  imageUrl,
-  imageAlt,
-  catName
-}: ImageAreaProps) => {
+const ImageArea = ({ imageUrl, imageAlt, catName }: ImageAreaProps) => {
+  const navigate = useNavigate()
+
+  const goBackToPrevScreen = () => {
+    navigate(-1)
+  }
+
   return (
     <div className={styles.imageContainer}>
-      <Image
-        objectFit='cover'
-        width='100%'
-        src={imageUrl}
-        alt={imageAlt}
-      />
+      <Image objectFit='cover' width='100%' src={imageUrl} alt={imageAlt} />
       <div className={styles.detailsOverlay}>
-        {catName}
+        <div className={styles.arrowBackDrop}>
+          <ArrowBackButton widthInPx={40} onClick={goBackToPrevScreen} color={'#fff'} />
+        </div>
+        <span>{catName}</span>
+      </div>
+    </div>
+  )
+}
+
+const CatInfoSection = ({ origin, temperament, isLoading }: CatInfoSectionProps) => {
+  if (isLoading) {
+    return <Skeleton count={3} />
+  }
+
+  return (
+    <div className={styles.catDetailsContainer}>
+      <div className={styles.catInfoOrigin}>
+        <p>
+          Origin: <span>{origin}</span>
+        </p>
+      </div>
+      <div className={styles.catInfoTemp}>
+        <p>
+          Temperament: <span>{temperament}</span>
+        </p>
       </div>
     </div>
   )
