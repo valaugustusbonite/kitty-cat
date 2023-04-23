@@ -1,18 +1,9 @@
+import { Cat } from '@/types/Cat'
+
 export interface DropDownItemProps {
-  value: string;
-  label: string;
+  cat: Cat
 }
 
-export const DropDownItem = ({
-  value,
-  label
-}: DropDownItemProps) => {
-
-  return (
-    <option 
-      value={value}
-    >
-      {label}
-    </option>
-  )
+export const DropDownItem = ({ cat }: DropDownItemProps) => {
+  return <option value={[cat.id ?? '', cat.name ?? '']}>{cat.name ?? ''}</option>
 }
