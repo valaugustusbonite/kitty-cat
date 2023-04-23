@@ -1,4 +1,4 @@
-# Kitty Cat (IONA evaluation)
+# Kitty Cat
 
 A frontend system that displays images of cats based on breed selected. 
 
