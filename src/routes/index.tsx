@@ -1,6 +1,7 @@
 import { Feed } from '@/feature/feed'
 import { publicRoutes } from './public'
 import { RouteObject, useRoutes } from 'react-router-dom'
+import { FallBackPage, FallBackPageEnum } from '@/common/components/exception'
 
 export const AppRoutes = () => {
   const commonRoutes: RouteObject[] = [
@@ -8,6 +9,10 @@ export const AppRoutes = () => {
       path: '/',
       element: <Feed />,
     },
+    {
+      path: '*',
+      element: <FallBackPage fallBackType={FallBackPageEnum.NOT_FOUND} />
+    }
   ]
 
   const routes = publicRoutes

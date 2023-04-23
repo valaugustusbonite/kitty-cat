@@ -1,3 +1,4 @@
+import { ApiException } from '@/common/exception'
 import { Cat } from '@/common/types/Cat'
 import axios from 'axios'
 import { useInfiniteQuery } from 'react-query'
@@ -17,9 +18,13 @@ export const useGetCats = (breedId: string) => {
 }
 
 const getCats = async (pageParam = 1, breedId: string): Promise<Cat[]> => {
-  const { data } = await axios.get(
-    `https://api.thecatapi.com/v1/images/search?limit=10&order=ASC&breed_ids=${breedId}&page=${pageParam}`,
-  )
+  try {
+      const { data } = await axios.get(
+        `https://api.thecatapi.com/v1/images/search?limit=10&order=ASC&breed_ids=${breedId}&page=${pageParam}`,
+      )
 
-  return data
+      return data
+  } catch (e: any) {
+    throw new ApiException(e.message)
+  }
 }
