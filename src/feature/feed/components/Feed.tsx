@@ -24,7 +24,7 @@ export const Feed = () => {
   const catBreeds = useGetCatBreedNames()
   const dipstach = useDispatch()
   const breedId = useTypedSelector(selectCatBreed)
-  const { fetchNextPage, hasNextPage, isFetchingNextPage, data, refetch, isLoading } =
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, data, refetch, isLoading, isError } =
     useGetCats(breedId)
   const catName = useTypedSelector(selectCatName)
   const { catId } = useParams()
@@ -101,6 +101,7 @@ export const Feed = () => {
           isLoading={!data ? isLoading : isFetchingNextPage}
           cats={data}
           refProp={lastCatRef}
+          isError={isError}
         />
       </div>
     </section>

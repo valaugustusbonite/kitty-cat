@@ -37,7 +37,7 @@ export const FeedItem = React.forwardRef(
 
 const ViewDetail = ({ catId, url }: ViewDetailProps) => {
   const navigate = useNavigate()
-  const route = `/${catId}`
+  const route = `/cats/${catId}`
   const catData: Cat = {
     id: catId,
     url: url,

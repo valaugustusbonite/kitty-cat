@@ -4,6 +4,7 @@ import Skeleton from 'react-loading-skeleton'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useGetCatDetails } from '../api/useGetCatDetails'
 import { ArrowBackButton } from '@/common/components/buttons/ArrowBackButton'
+import { FallBackPage, FallBackPageEnum } from '@/common/components/exception'
 
 interface ImageAreaProps {
   imageUrl: string
@@ -20,8 +21,12 @@ interface CatInfoSectionProps {
 export const CatDetails = () => {
   const { catId } = useParams()
   const { state } = useLocation()
-  const { data, isLoading } = useGetCatDetails(state.id ?? catId ?? '')
+  const { data, isLoading, isError } = useGetCatDetails(state.id ?? catId ?? '')
   const catDetails = data?.breeds[0]
+
+  if (isError) {
+    return <FallBackPage fallBackType={FallBackPageEnum.ERROR}/>
+  }
 
   return (
     <div className={styles.detailsContainer}>
